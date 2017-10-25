@@ -1,0 +1,20 @@
+#! /bin/bash
+
+set -e
+
+# Some build steps require username, so give them one
+export GRADLE_OPTS='-Dorg.gradle.daemon=false'
+
+cd /opt/h2o-3
+
+echo "###### Activate virtualenv ######"
+. /envs/h2o_env_python3.5/bin/activate
+
+echo "###### Clone H2O-3 ######"
+git clone https://github.com/h2oai/h2o-3 .
+
+echo "TESTING: Checkout test branch"
+git checkout mr/ita-34-gradle-cache
+
+echo "###### Build H2O-3 ######"
+make -f docker/Makefile.jenkins warmup-caches
